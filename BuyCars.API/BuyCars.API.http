@@ -1,0 +1,6 @@
+@BuyCars.API_HostAddress = http://localhost:5220
+
+GET {{BuyCars.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
