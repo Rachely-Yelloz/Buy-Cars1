@@ -1,19 +1,18 @@
-﻿using BuyCars.CORE.Models;
+﻿
+using BuyCars.CORE.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BuyCars.CORE.Services
 {
     public interface IOrderService
     {
-        List<Order> GetList();
-        Order Get(int id);
-        List<Order> Getbyid(Castomer cas);
-        void Post(Order order);
-        void Put(int id, DateTime d);
-        void Delete(int id);
+        Task<List<Order>> GetListAsync();
+        Task<Order> GetAsync(int id);
+        Task<List<Order>> GetByCustomerIdAsync(Castomer customer);
+        Task PostAsync(Order order);
+        Task PutAsync(int id, DateTime date);
+        Task DeleteAsync(int id);
     }
 }

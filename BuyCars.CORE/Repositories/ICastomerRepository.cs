@@ -9,11 +9,11 @@ namespace BuyCars.CORE.Repositories
 {
     public interface ICastomerRepository
     {
-        List<Castomer> getList();
-       Castomer Get(int id);
-        void Post(Castomer castomer);
-        void Put(int id, string name, string phone);
-        void PutOnlyPhone(int id, string phone);
-        void Delete(int id);
+        Task<List<Castomer>> getListAsync();
+        Task<Castomer> GetAsync(int id);
+        Task PostAsync(Castomer castomer);
+        Task PutAsync(int id, string name, string phone);
+        Task PutOnlyPhoneAsync(int id, string phone);
+        Task DeleteAsync(int id);
     }
 }

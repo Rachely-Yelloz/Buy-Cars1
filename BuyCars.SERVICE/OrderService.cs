@@ -1,16 +1,14 @@
-﻿using BuyCars.CORE.Models;
+﻿
+using BuyCars.CORE.Models;
 using BuyCars.CORE.Repositories;
 using BuyCars.CORE.Services;
-using BuyCars.DATA.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BuyCars.SERVICE
 {
-    public class OrderService:IOrderService
+    public class OrderService : IOrderService
     {
         private readonly IOrderRepository _OrderRepository;
 
@@ -18,30 +16,36 @@ namespace BuyCars.SERVICE
         {
             _OrderRepository = OrderRepository;
         }
-        public List<Order> GetList()
+
+        public async Task<List<Order>> GetListAsync()
         {
-            return _OrderRepository.getList();
-        }
-        public Order Get(int id)
-        {
-            return _OrderRepository.Get(id);
-        }
-        public List<Order> Getbyid(Castomer cas)
-        {
-            return _OrderRepository.Getbyid(cas);
-        }
-        public void Post(Order order)
-        {
-            _OrderRepository.Post(order);
-        }
-        public void Put(int id, DateTime d)
-        {
-            _OrderRepository.Put(id, d);
-        }
-        public void Delete(int id) { 
-        _OrderRepository.Delete(id);
+            return await _OrderRepository.GetListAsync();
         }
 
+        public async Task<Order> GetAsync(int id)
+        {
+            return await _OrderRepository.GetAsync(id);
+        }
 
+        public async Task<List<Order>> GetByCustomerIdAsync(Castomer customer)
+        {
+            return await _OrderRepository.GetByCustomerIdAsync(customer);
+        }
+
+        public async Task PostAsync(Order order)
+        {
+            await _OrderRepository.PostAsync(order);
+        }
+
+        public async Task PutAsync(int id, DateTime date)
+        {
+            await _OrderRepository.PutAsync(id, date);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _OrderRepository.DeleteAsync(id);
+        }
+    }
 }
-}
+

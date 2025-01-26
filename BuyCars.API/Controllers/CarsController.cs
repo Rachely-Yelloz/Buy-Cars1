@@ -1,10 +1,9 @@
 ﻿using BuyCars.API.Models;
 using BuyCars.CORE.Models;
 using BuyCars.CORE.Services;
-using BuyCars.SERVICE;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BuyCars.API.Controllers
 {
@@ -21,39 +20,47 @@ namespace BuyCars.API.Controllers
 
         // GET: api/<CarsController>
         [HttpGet]
-        public IEnumerable<Car> Get()
+        public async Task<IEnumerable<Car>> Get()
         {
-            return _carService.GetList();
+            return await _carService.GetListAsync();
+        }
+
+        // GET api/<CarsController>/sold
+        [HttpGet("sold")]
+        public async Task<IEnumerable<Car>> GetSold()
+        {
+            return await _carService.GetSoldAsync();
         }
 
         // GET api/<CarsController>/5
-        [HttpGet("sold")]
-        public IEnumerable<Car> GetSold() {
-        return _carService.GetSold();
-        }
-
         [HttpGet("{id}")]
-        public Car GetById(int id) { 
-        return _carService.GetById(id);
-        }
-
-        [HttpGet("company/{company}")]
-        public List<Car> GetBycompany(string company)
+        public async Task<Car> GetById(int id)
         {
-            return _carService.GetBycompany(company);
+            return await _carService.GetByIdAsync(id);
         }
 
-        // DELETE api/<CarsController>/5
+        // GET api/<CarsController>/company/{company}
+        [HttpGet("company/{company}")]
+        public async Task<List<Car>> GetByCompany(string company)
+        {
+            return await _carService.GetByCompanyAsync(company);
+        }
+
+        // POST api/<CarsController>
         [HttpPost]
-        public void Post([FromBody]CarPostModel c)
+        public async Task<IActionResult> Post([FromBody] CarPostModel c)
         {
             Car car = new Car() { Company = c.Company, Price = c.Price, status = true };
-            _carService.Post(car);
+            await _carService.PostAsync(car);
+            return CreatedAtAction(nameof(GetById), new { id = car.Id }, car);
         }
+
+        // PUT api/<CarsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string? company, double price)
+        public async Task<IActionResult> Put(int id, [FromBody] string? company, double price)
         {
-            _carService.Put(id, company, price);
+            await _carService.PutAsync(id, company, price);
+            return NoContent();
         }
     }
 }

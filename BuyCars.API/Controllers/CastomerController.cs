@@ -21,43 +21,43 @@ namespace BuyCars.API.Controllers
 
         // GET: api/<CastomerController>
         [HttpGet]
-        public IEnumerable<Castomer> Get()
+        public async Task< IEnumerable<Castomer>> GetAsync()
         {
-            return _CastomerService.GetList();
+            return await _CastomerService.GetListAsync();
         }
 
         // GET api/<CastomerController>/5
         [HttpGet("{id}")]
-        public Castomer Get(int id)
+        public async Task<Castomer> GetAsync(int id)
         {
-            return _CastomerService.Get(id); 
+            return await _CastomerService.GetAsync(id); 
         }
 
         // POST api/<CastomerController>
         [HttpPost]
-        public void Post(CastomerPostModel castomer)
+        public async Task PostAsync([FromBody] CastomerPostModel castomer)
         {
             Castomer c = new Castomer() { name = castomer.name, phone = castomer.phone };
-            _CastomerService.Post(c);
+            await _CastomerService.PostAsync(c);
         }
 
         // PUT api/<CastomerController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string name, string phone)
+        public async Task PutAsync(int id, [FromBody] string name, string phone)
         {
-            _CastomerService.Put(id, name, phone);
+            await _CastomerService.PutAsync(id, name, phone);
         }
 
         [HttpPut("phone/{phone}")]
-        public void PutOnlyPhone(int id, string phone)
+        public async Task PutOnlyPhoneAsync(int id, string phone)
         {
-            _CastomerService.PutOnlyPhone(id, phone);
+          await  _CastomerService.PutOnlyPhoneAsync(id, phone);
         }
         // DELETE api/<CastomerController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            _CastomerService.Delete(id);
+           await _CastomerService.DeleteAsync(id);
         }
     }
 }

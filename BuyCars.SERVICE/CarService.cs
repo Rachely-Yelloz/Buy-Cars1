@@ -1,46 +1,49 @@
-﻿using BuyCars.CORE.Models;
+﻿
+using BuyCars.CORE.Models;
 using BuyCars.CORE.Repositories;
 using BuyCars.CORE.Services;
-using BuyCars.DATA.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BuyCars.SERVICE
 {
-    public class CarService:ICarService
+    public class CarService : ICarService
     {
-        private readonly ICarRepository _CarRepository;
+        private readonly ICarRepository _carRepository;
 
         public CarService(ICarRepository carRepository)
         {
-            _CarRepository = carRepository;
+            _carRepository = carRepository;
         }
-        public List<Car> GetList()
+
+        public async Task<List<Car>> GetListAsync()
         {
-            return _CarRepository.getList();
+            return await _carRepository.GetListAsync();
         }
-       public List<Car> GetSold()
+
+        public async Task<List<Car>> GetSoldAsync()
         {
-            return _CarRepository.GetSold();
+            return await _carRepository.GetSoldAsync();
         }
-        public Car GetById(int id)
+
+        public async Task<Car> GetByIdAsync(int id)
         {
-            return _CarRepository.GetById(id);
+            return await _carRepository.GetByIdAsync(id);
         }
-        public List<Car> GetBycompany(string company)
+
+        public async Task<List<Car>> GetByCompanyAsync(string company)
         {
-            return _CarRepository.GetBycompany(company);
+            return await _carRepository.GetByCompanyAsync(company);
         }
-        public void Post(Car c)
+
+        public async Task PostAsync(Car c)
         {
-           _CarRepository.Post(c);
+            await _carRepository.PostAsync(c);
         }
-        public void Put(int id, string? company, double price)
+
+        public async Task PutAsync(int id, string? company, double price)
         {
-            _CarRepository.Put(id, company, price);
+            await _carRepository.PutAsync(id, company, price);
         }
     }
 }

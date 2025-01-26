@@ -9,11 +9,11 @@ namespace BuyCars.CORE.Services
 {
     public interface ICarService
     {
-        List<Car> GetList();
-        List<Car> GetSold();
-        Car GetById(int id);
-        List<Car> GetBycompany(string company);
-        void Post(Car c);
-        void Put(int id, string? company, double price);
+        Task<List<Car>> GetListAsync();
+        Task<List<Car>> GetSoldAsync();
+        Task<Car> GetByIdAsync(int id);
+        Task<List<Car>> GetByCompanyAsync(string company);
+        Task PostAsync(Car c);
+        Task PutAsync(int id, string? company, double price);
     }
 }

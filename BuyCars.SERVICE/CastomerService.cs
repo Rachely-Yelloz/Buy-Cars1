@@ -18,29 +18,29 @@ namespace BuyCars.SERVICE
         {
             _CastomerRepository = CastomerRepository;
         }
-        public List<Castomer> GetList()
+        public async Task< List<Castomer>> GetListAsync()
         {
-            return _CastomerRepository.getList();
+            return await _CastomerRepository.getListAsync();
         }
-        public Castomer Get(int id)
+        public async Task< Castomer> GetAsync(int id)
         {
-            return _CastomerRepository.Get(id);
+            return await _CastomerRepository.GetAsync(id);
         }
-        public void Post(Castomer castomer)
+        public async Task PostAsync(Castomer castomer)
         {
-            _CastomerRepository.Post(castomer);
+           await _CastomerRepository.PostAsync(castomer);
         }
-        public void Put(int id, string name, string phone)
+        public async Task PutAsync(int id, string name, string phone)
         {
-            _CastomerRepository.Put(id, name, phone);
+          await  _CastomerRepository.PutAsync(id, name, phone);
         }
-        public void PutOnlyPhone(int id, string phone)
+        public async Task PutOnlyPhoneAsync(int id, string phone)
         {
-            _CastomerRepository.PutOnlyPhone(id, phone);
+          await  _CastomerRepository.PutOnlyPhoneAsync(id, phone);
         }
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            _CastomerRepository.Delete(id);
+          await  _CastomerRepository.DeleteAsync(id);
         }
     }
 }

@@ -1,14 +1,15 @@
-﻿using BuyCars.CORE.Models;
+﻿
+using BuyCars.CORE.Models;
 using BuyCars.CORE.Repositories;
+using Microsoft.EntityFrameworkCore; // ודא שאתה כולל את ה-namespace הזה
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BuyCars.DATA.Repositories
 {
-    public class OrderRepository:IOrderRepository
+    public class OrderRepository : IOrderRepository
     {
         private readonly DataContext _dataContext;
 
@@ -16,51 +17,47 @@ namespace BuyCars.DATA.Repositories
         {
             _dataContext = dataContext;
         }
-        public List<Order> getList()
-        {
-            return _dataContext.orders.ToList();
-        }
-        public Order Get(int id)
-        {
-            foreach (var item in _dataContext.orders.ToList()) 
-            { if (item.Id == id) return item; }
-            return null;
-        }
-        public List<Order> Getbyid(Castomer cas)
-        {
-            List<Order> l = new List<Order>();
-            foreach (var item in _dataContext.orders.ToList()) 
-            { if (item.Castomer.id == cas.id) l.Add(item); }
-            return l;
-        }
-        public void Post(Order order)
-        {
-            _dataContext.orders .Add(new Order() { dateOfOrder =order.dateOfOrder, Castomer = order.Castomer, Car = order.Car });
-            _dataContext.SaveChanges();
 
-        }
-        public void Put(int id, DateTime d)
+        public async Task<List<Order>> GetListAsync()
         {
+            return await _dataContext.orders.ToListAsync();
+        }
 
-            for (int i = 0; i < _dataContext.orders.ToList().Count; i++)
+        public async Task<Order> GetAsync(int id)
+        {
+            return await _dataContext.orders.FirstOrDefaultAsync(o => o.Id == id);
+        }
+
+        public async Task<List<Order>> GetByCustomerIdAsync(Castomer customer)
+        {
+            return await _dataContext.orders
+                .Where(o => o.Castomer.id == customer.id)
+                .ToListAsync();
+        }
+
+        public async Task PostAsync(Order order)
+        {
+            await _dataContext.orders.AddAsync(new Order() { dateOfOrder = order.dateOfOrder, Castomer = order.Castomer, Car = order.Car });
+            await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task PutAsync(int id, DateTime date)
+        {
+            var order = await _dataContext.orders.FirstOrDefaultAsync(o => o.Id == id);
+            if (order != null)
             {
-                if (_dataContext.orders.ToList()[i].Id == id)
-                {
-                    _dataContext.orders.ToList()[i].dateOfOrder = d;
-                    _dataContext.SaveChanges();
-
-                }
+                order.dateOfOrder = date;
+                await _dataContext.SaveChangesAsync();
             }
         }
-        public void Delete(int id)
-        {
 
-            for (int i = 0; i < _dataContext.orders.ToList().Count; i++)
+        public async Task DeleteAsync(int id)
+        {
+            var order = await _dataContext.orders.FirstOrDefaultAsync(o => o.Id == id);
+            if (order != null)
             {
-                if (_dataContext.orders.ToList()[i].Id == id) 
-                { _dataContext.orders.ToList().RemoveAt(i);
-                    _dataContext.SaveChanges();
-                }
+                _dataContext.orders.Remove(order);
+                await _dataContext.SaveChangesAsync();
             }
         }
     }

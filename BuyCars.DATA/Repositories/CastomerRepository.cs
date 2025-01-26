@@ -1,5 +1,6 @@
 ﻿using BuyCars.CORE.Models;
 using BuyCars.CORE.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BuyCars.DATA.Repositories
 {
-    public class CastomerRepository:ICastomerRepository
+    public class CastomerRepository : ICastomerRepository
     {
         private readonly DataContext _dataContext;
 
@@ -16,66 +17,61 @@ namespace BuyCars.DATA.Repositories
         {
             _dataContext = dataContext;
         }
-        public List<Castomer> getList()
+        public async Task<List<Castomer>> getListAsync()
         {
-            return _dataContext.castomers.ToList();
+            return await Task.Run(() => _dataContext.castomers.ToList());
         }
-        public Castomer Get(int id)
+
+        public async Task<Castomer> GetAsync(int id)
         {
-            foreach (Castomer castomer in _dataContext.castomers.ToList())
+            return await _dataContext.castomers
+                .FirstOrDefaultAsync(castomer => castomer.id == id);
+        }
+
+        public async Task PostAsync(Castomer castomer)
+        {
+            _dataContext.castomers.ToList().Add(new Castomer() { name = castomer.name, phone = castomer.phone });
+           await _dataContext.SaveChangesAsync();
+
+        }
+        public async Task PutAsync(int id, string name, string phone)
+        {
+            var castomer = await _dataContext.castomers
+                .FirstOrDefaultAsync(c => c.id == id);
+
+            if (castomer == null)
             {
-                if(castomer.id==id)
-                    return castomer;
+                return; 
             }
-            return null;
+
+            castomer.name = name;
+            castomer.phone = phone;
+
+            await _dataContext.SaveChangesAsync();
         }
-        public void Post(Castomer castomer)
+        public async Task PutOnlyPhoneAsync(int id, string phone)
         {
-            _dataContext.castomers.ToList().Add(new Castomer() { name=castomer.name, phone=castomer.phone });
-            _dataContext.SaveChanges();
+            var castomer = await _dataContext.castomers
+                .FirstOrDefaultAsync(c => c.id == id);
+            if (castomer == null)
+                return;
+            castomer.phone = phone;
+            await _dataContext.SaveChangesAsync();
 
         }
-        public void Put(int id,string name, string phone)
+        public async Task DeleteAsync(int id)
         {
+            var castomer = await _dataContext.castomers
+                .FirstOrDefaultAsync(c => c.id == id);
 
-            for (int i = 0; i < _dataContext.castomers.ToList().Count; i++)
+            if (castomer == null)
             {
-                if (_dataContext.castomers.ToList()[i].id == id)
-                {
-                    _dataContext.castomers.ToList()[i].name = name;
-                    _dataContext.castomers.ToList()[i].phone = phone;
-                    _dataContext.SaveChanges();
-
-                    return;
-                }
+                return; 
             }
-        }
-        public void PutOnlyPhone(int id, string phone)
-        {
-            for (int i = 0; i < _dataContext.castomers.ToList().Count; i++)
-            {
-                if (_dataContext.castomers.ToList()[i].id == id)
-                {
-                    _dataContext.castomers.ToList()[i].phone = phone;
-                    _dataContext.SaveChanges();
 
-                    return;
-                }
-            }
-        }
-        public void Delete(int id)
-        {
-            for (int i = 0; i < _dataContext.castomers.ToList().Count; i++)
-            {
-                if (_dataContext.castomers.ToList()[i].id == id)
-                {
-                    _dataContext.castomers.ToList().RemoveAt(i);
-                    return;
-                }
+            _dataContext.castomers.Remove(castomer);
 
-            }
-            _dataContext.SaveChanges();
-
+            await _dataContext.SaveChangesAsync();
         }
     }
 }
