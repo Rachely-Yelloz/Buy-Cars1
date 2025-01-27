@@ -1,3 +1,4 @@
+using BuyCars.API.Middlewares;
 using BuyCars.CORE;
 using BuyCars.CORE.Models;
 using BuyCars.CORE.Repositories;
@@ -34,6 +35,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseMiddleware<ShabbatMiddleware>();
 
 app.MapControllers();
 
